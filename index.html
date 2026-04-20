@@ -174,22 +174,16 @@
     body { animation: fadeInPage 0.6s ease-out; }
     @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Scroll reveal */
-    .reveal {
-      opacity: 0; transform: translateY(30px);
+    /* Scroll reveal — initial state set via JS to avoid invisible content if JS fails */
+    .reveal, .reveal-left, .reveal-right {
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-left {
-      opacity: 0; transform: translateX(-40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal-left.visible { opacity: 1; transform: translateX(0); }
-    .reveal-right {
-      opacity: 0; transform: translateX(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .js-animations .reveal { opacity: 0; transform: translateY(30px); }
+    .js-animations .reveal.visible { opacity: 1; transform: translateY(0); }
+    .js-animations .reveal-left { opacity: 0; transform: translateX(-40px); }
+    .js-animations .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .js-animations .reveal-right { opacity: 0; transform: translateX(40px); }
+    .js-animations .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
     /* ===========================
        NAVIGATION
@@ -314,9 +308,49 @@
 
     .hero-content {
       position: relative; z-index: 2;
-      display: flex; flex-direction: column; align-items: flex-start;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      align-items: center;
       padding: 120px 0 180px;
     }
+    .hero-text { display: flex; flex-direction: column; align-items: flex-start; }
+    @media (max-width: 900px) {
+      .hero-content { grid-template-columns: 1fr; gap: 0; }
+      .hero-visual { display: none; }
+    }
+
+    /* Code window hero visual */
+    .hero-visual { display: flex; justify-content: flex-end; }
+    .code-window {
+      background: var(--dark-2); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg); overflow: hidden; width: 100%;
+      max-width: 460px;
+      box-shadow: var(--shadow-lg), 0 0 60px rgba(14,165,233,0.12);
+      font-family: 'Courier New', Courier, monospace; font-size: 0.76rem;
+    }
+    .cw-header {
+      background: var(--dark-3); padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cw-dots { display: flex; gap: 6px; }
+    .cw-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .cw-dot.r { background: #ef4444; }
+    .cw-dot.y { background: #f59e0b; }
+    .cw-dot.g { background: #22c55e; }
+    .cw-filename { font-size: 0.7rem; color: var(--text-muted); }
+    .cw-body { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); line-height: 1.75; }
+    .cw-line { display: flex; gap: 14px; }
+    .cw-ln { color: rgba(148,163,184,0.3); user-select: none; min-width: 14px; text-align: right; font-size: 0.65rem; padding-top: 1px; }
+    .c-kw { color: #c792ea; }
+    .c-fn { color: #82aaff; }
+    .c-mod { color: #ffcb6b; }
+    .c-comment { color: #546e7a; font-style: italic; }
+    .c-def { color: var(--text); }
+    .cw-terminal { padding: 10px 18px; background: rgba(0,0,0,0.35); line-height: 1.8; }
+    .t-prompt { color: var(--primary); }
+    .t-ok { color: #22c55e; }
+    .t-cursor { display: inline-block; width: 7px; height: 12px; background: var(--primary); animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 16px; background: rgba(14, 165, 233, 0.1);
@@ -845,6 +879,7 @@
     }
   </style>
   <noscript><style>.reveal, .reveal-left, .reveal-right { opacity: 1 !important; transform: none !important; }</style></noscript>
+  <script>document.documentElement.classList.add('js-animations');</script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -889,26 +924,59 @@
 
   <div class="container">
     <div class="hero-content">
-      <div class="hero-badge" aria-label="Available for new projects">
-        <span class="dot" aria-hidden="true"></span>
-        Available for New Projects
+      <div class="hero-text">
+        <div class="hero-badge" aria-label="Available for new projects">
+          <span class="dot" aria-hidden="true"></span>
+          Available for New Projects
+        </div>
+        <h1 class="hero-headline">
+          I Build the Bots<br>
+          That <span class="gradient-text">Build Your Business</span>
+        </h1>
+        <p class="hero-subheadline">
+          Python &amp; AI developer specializing in automation, web scraping, chatbots,
+          and data pipelines. 50+ projects delivered. Zero fluff — just results.
+        </p>
+        <div class="hero-ctas">
+          <a href="#portfolio" class="btn btn-primary" aria-label="View my portfolio work">
+            View My Work
+          </a>
+          <a href="https://www.fiverr.com/kaiser42" target="_blank" rel="noopener noreferrer"
+             class="btn btn-secondary" aria-label="Hire Kaiser on Fiverr">
+            Hire Me on Fiverr →
+          </a>
+        </div>
       </div>
-      <h1 class="hero-headline">
-        I Build the Bots<br>
-        That <span class="gradient-text">Build Your Business</span>
-      </h1>
-      <p class="hero-subheadline">
-        Python &amp; AI developer specializing in automation, web scraping, chatbots,
-        and data pipelines. 50+ projects delivered. Zero fluff — just results.
-      </p>
-      <div class="hero-ctas">
-        <a href="#portfolio" class="btn btn-primary" aria-label="View my portfolio work">
-          View My Work
-        </a>
-        <a href="https://www.fiverr.com/kaiser42" target="_blank" rel="noopener noreferrer"
-           class="btn btn-secondary" aria-label="Hire Kaiser on Fiverr">
-          Hire Me on Fiverr →
-        </a>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="code-window">
+          <div class="cw-header">
+            <div class="cw-dots">
+              <span class="cw-dot r"></span>
+              <span class="cw-dot y"></span>
+              <span class="cw-dot g"></span>
+            </div>
+            <span class="cw-filename">price_monitor.py</span>
+          </div>
+          <div class="cw-body">
+            <div class="cw-line"><span class="cw-ln">1</span><span><span class="c-kw">import</span> <span class="c-mod">asyncio</span>, <span class="c-mod">aiohttp</span></span></div>
+            <div class="cw-line"><span class="cw-ln">2</span><span><span class="c-kw">from</span> <span class="c-mod">telegram.ext</span> <span class="c-kw">import</span> <span class="c-def">Application</span></span></div>
+            <div class="cw-line"><span class="cw-ln">3</span><span>&nbsp;</span></div>
+            <div class="cw-line"><span class="cw-ln">4</span><span><span class="c-kw">async def</span> <span class="c-fn">monitor_prices</span>(<span class="c-def">skus</span>):</span></div>
+            <div class="cw-line"><span class="cw-ln">5</span><span>&nbsp;&nbsp;<span class="c-comment"># scrape + alert on drops</span></span></div>
+            <div class="cw-line"><span class="cw-ln">6</span><span>&nbsp;&nbsp;<span class="c-kw">async with</span> <span class="c-mod">aiohttp</span>.<span class="c-fn">ClientSession</span>() <span class="c-kw">as</span> <span class="c-def">s</span>:</span></div>
+            <div class="cw-line"><span class="cw-ln">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-def">prices</span> = <span class="c-kw">await</span> <span class="c-fn">scrape_all</span>(<span class="c-def">s</span>, <span class="c-def">skus</span>)</span></div>
+            <div class="cw-line"><span class="cw-ln">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">for</span> <span class="c-def">sku</span>, <span class="c-def">price</span> <span class="c-kw">in</span> <span class="c-def">prices</span>.<span class="c-fn">items</span>():</span></div>
+            <div class="cw-line"><span class="cw-ln">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">if</span> <span class="c-def">price</span> &lt; <span class="c-def">threshold</span>[<span class="c-def">sku</span>]:</span></div>
+            <div class="cw-line"><span class="cw-ln">10</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">await</span> <span class="c-fn">send_alert</span>(<span class="c-def">bot</span>, <span class="c-def">sku</span>, <span class="c-def">price</span>)</span></div>
+          </div>
+          <div class="cw-terminal">
+            <div><span class="t-prompt">$</span> python price_monitor.py</div>
+            <div class="t-ok">&#x2713; Monitoring 847 SKUs</div>
+            <div class="t-ok">&#x2713; Alert sent: Nike Air &minus;18%</div>
+            <div><span class="t-cursor"></span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -917,15 +985,15 @@
     <div class="container">
       <div class="stats-bar-inner">
         <div class="stat-item">
-          <span class="stat-number" data-target="50" data-suffix="+">0</span>
+          <span class="stat-number" data-target="50" data-suffix="+">50+</span>
           <span class="stat-label">Projects Delivered</span>
         </div>
         <div class="stat-item">
-          <span class="stat-number" data-target="7" data-suffix="">0</span>
+          <span class="stat-number" data-target="7" data-suffix="">7</span>
           <span class="stat-label">Services Offered</span>
         </div>
         <div class="stat-item">
-          <span class="stat-number" data-target="98" data-suffix="%">0</span>
+          <span class="stat-number" data-target="99" data-suffix="%">99%</span>
           <span class="stat-label">Satisfaction Rate</span>
         </div>
         <div class="stat-item">
@@ -1722,7 +1790,7 @@
           counterObserver.unobserve(el);
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.1 });
 
     counterEls.forEach(el => counterObserver.observe(el));
   } else {
@@ -1735,10 +1803,10 @@
   const wrapper = document.getElementById('testimonials-wrapper');
   const track = document.getElementById('testimonials-track');
   const dots = document.querySelectorAll('.carousel-dot');
+  if (wrapper && track) {
   let isDragging = false;
   let startX = 0;
   let scrollLeft = 0;
-  if (!wrapper || !track) return;
 
   // Drag to scroll
   wrapper.addEventListener('mousedown', (e) => {
@@ -1816,6 +1884,7 @@
   wrapper.addEventListener('mouseleave', startAutoScroll);
   wrapper.addEventListener('touchstart', () => clearInterval(autoScrollInterval), { passive: true });
   wrapper.addEventListener('touchend', startAutoScroll, { passive: true });
+  } // end if (wrapper && track)
 
   // ===========================
   // SMOOTH SCROLL POLYFILL
